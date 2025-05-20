@@ -11,6 +11,10 @@ import React, { useMemo } from 'react';
 
 import MainNavigator from './src/navigator/MainNavigator';
 import { AppContext } from './src/context/AppContext';
+import Home from './src/screens/Home';
+import ScanOut from './src/screens/ScanOut';
+import ScanIn from './src/screens/ScanIn';
+import RegisterCustomer from './src/screens/RegisterCustomer';
 
 
 
@@ -43,6 +47,8 @@ function App(): React.JSX.Element {
     [user]
   );
   const safePadding = '5%';
+
+ 
 return(
 <NavigationContainer>
   <AppContext.Provider value={appUtils}>
