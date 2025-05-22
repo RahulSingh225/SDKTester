@@ -22,7 +22,7 @@ function App(): React.JSX.Element {
 
   const [user, setUser] = React.useState(null);
   const [isLoading, setIsLoading] = React.useState(false);
-  const [url,setUrl] = React.useState('https://vguard.aysnct.com');
+  const [url,setUrl] = React.useState();
  
 
 
@@ -38,7 +38,7 @@ function App(): React.JSX.Element {
       clearAll: () => {
         setUser(null);
       },
-      setEnvironment: (url:string) => {
+      setEnvironment: (url:any) => {
         setUrl(url);
       },
       getEnvironment: () => url,

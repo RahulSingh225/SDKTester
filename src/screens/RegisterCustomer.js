@@ -28,27 +28,27 @@ const RegisterCustomer = () => {
 
 const samplebody = {
         nameTitle: '',
-        contactNo: '6565656565',
-        name: 'SHIVAKAR',
-        email: 'test65@gmail.com',
-        currAdd: 'Central Delhi',
-        alternateNo: '7575757575',
-        state: 'Delhi',
-        district: 'Delhi',
-        city: 'Central Delhi',
-        landmark: 'Delhi',
-        pinCode: '110006',
-        dealerName: 'Mohit test',
-        dealerAdd: 'Central Delhi',
-        dealerState: 'Delhi',
-        dealerDist: 'Central Delhi',
-        dealerCity: 'Central Delhi',
-        dealerPinCode: '110006',
-        dealerNumber: '9873608820',
-        addedBy: 22390, //Retailer UserId
-        billDetails: '4b34eb9a-6e4c-4314-b408-31f6623b0a71.jpg',
-        warrantyPhoto: '4b34eb9a-6e4c-4314-b408-31f6623b0a71.jpg',
-        sellingPrice: '1500',
+        contactNo: '7398549171',
+        name: 'Shyam Lal',
+        email: '',
+        currAdd: 'Fatehpur',
+        alternateNo: '',
+        state: 'Uttar Pradesh',
+        district: 'Fatehpur',
+        city: 'Fatehpur',
+        landmark: 'Fatehpur',
+        pinCode: '212635',
+        dealerName: 'Asha Gupta',
+        dealerAdd: 'Lohai Gali Bindki',
+        dealerState: 'Uttar Pradesh',
+        dealerDist: 'Fatehpur',
+        dealerCity: 'Fatehpur',
+        dealerPinCode: '212635',
+        dealerNumber: '9889946967',
+        addedBy: 161792, //Retailer UserId
+        billDetails: '',
+        warrantyPhoto: '',
+        sellingPrice: '0',
         emptStr: '',
         cresp: {
           custIdForProdInstall: '',
@@ -66,37 +66,37 @@ const samplebody = {
           clubPoints: '',
           scanDate: '',
           scanStatus: '',
-          copuonCode: '5362224187701942',
+          copuonCode: '5844317520968617',
           bitEligibleScratchCard: false,
-          partId: '141',
-          pardId: 123,
-          partNumber: '3002751',
+          partId: 1976,
+          pardId: 1976,
+          partNumber: '3035978',
           partName: '',
-          skuDetail: 'JAADOO1050',
-          purchaseDate: '2024-05-11', //also Manufacturing Date
-          categoryId: '1',
-          category: 'Digital Ups',
+          skuDetail: 'VT 220',
+          purchaseDate: '2025-05-19', //also Manufacturing Date
+          categoryId: '12',
+          category: 'DU Battery',
           anomaly: 0,
-          warranty: '365',
-        },
+          warranty: '0',
+    },
         selectedProd: {
           specs: '',
           pointsFormat: '',
           product: '',
           productName: '',
-          productCategory: 'Digital Ups',
-          productCode: '3002751',
-          points: 0.0,
+          productCategory: 'DU Battery',
+          productCode: '3035978',
+          points: 250.0,
           imageUrl: '',
-          userId: '22390',
+          userId: '161792',
           productId: '',
           paytmMobileNo: '',
-        },
-        latitude: '28.6798562',
-        longitude: '77.0622139',
-        geolocation: 'Central Delhi',
+    },
+        latitude: '',
+        longitude: '',
+        geolocation: 'Fatehpur',
         dealerCategory: 'Customer',
-      }
+}
 
 
 const [formData, setFormData] = useState({
@@ -189,11 +189,11 @@ const [cresp, setCresp] = useState({
   const handleChange = (field, value) => {
     console.log(formData)
     if(field === 'pinCode' && value.length == 6) {
-        getPincodeList(value, context.baseurl)
+        getPincodeList(value, context.getEnvironment().url)
         .then((response) => {
           if (response.status === 200) {
             const data = response.data;
-            getDetailsByPinCode(data[0].pinCodeId, context.baseurl)
+            getDetailsByPinCode(data[0].pinCodeId, context.getEnvironment().url)
             .then((response) => {
               if (response.status === 200) {
                 const data = response.data;
@@ -300,11 +300,39 @@ const [cresp, setCresp] = useState({
 
   // Handle form submission
   const handleSubmit = async () => {
-     setRequestData(formData)
+    var reqbody = formData;
+    reqbody.cresp = cresp 
+    reqbody.selectedProd =  {
+          specs: '',
+          pointsFormat: '',
+          product: '',
+          productName: '',
+          productCategory: cresp.category,
+          productCode: cresp.partNumber,
+          points: cresp.couponPoints,
+          imageUrl: '',
+          userId: user.userId,
+          productId: '',
+          paytmMobileNo: '',
+        }
+     setRequestData(JSON.stringify(samplebody))
+     console.log(reqbody)
      setLoading(true)
-    let data = await registerCustomer(formData)
-   setLoading(false)
+     try {
+      let data = await registerCustomer(samplebody)
+
+      setLoading(false)
     setResponseData(data)
+     } catch (error) {
+      console.error('Error during form submission:', error);
+      setLoading(false)
+      setResponseData(error)
+      Alert.alert('Error', 'An error occurred while submitting the form.');
+      return;
+      
+     }
+    
+   
   };
 
   // Clear the form
@@ -573,7 +601,7 @@ const [cresp, setCresp] = useState({
             </View>
             <Surface style={styles.codeBlock}>
               <ScrollView horizontal>
-                <Text style={styles.codeText}>{requestData || 'No request sent yet'}</Text>
+                <TextInput multiline={true} numberOfLines={15} style={[styles.codeText,{textAlignVertical:'top'}]}>{requestData || 'No request sent yet'}</TextInput>
               </ScrollView>
               {requestData && (
                 <View style={styles.quickActionButtons}>

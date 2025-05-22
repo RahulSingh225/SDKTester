@@ -12,6 +12,7 @@ const Welcome = ({navigation}) => {
   const context = React.useContext(AppContext)
   const handleSubmit = () => {
     console.log('calling handle submit')
+    context.setEnvironment(env==='production'?prodConfig:uatConfig)
     verifyUser(mobileNumber,env==='production'?prodConfig:uatConfig).then((res) => {
       console.log('Response:', res)
       
